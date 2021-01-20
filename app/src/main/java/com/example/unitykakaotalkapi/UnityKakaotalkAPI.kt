@@ -1,13 +1,15 @@
 package com.example.unitykakaotalkapi
 
 import android.content.Context
-import android.content.res.Resources
 import android.util.Log
+import com.google.gson.GsonBuilder
 import com.kakao.sdk.auth.LoginClient
+import com.kakao.sdk.talk.TalkApiClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
-import com.kakao.sdk.common.util.Utility;
-import com.unity3d.player.UnityPlayer;
+import com.kakao.sdk.common.util.Utility
+import com.kakao.sdk.user.UserApiClient
+import com.unity3d.player.UnityPlayer
 
 class UnityKakaotalkAPI {
     private var context: Context? = null;
