@@ -8,6 +8,10 @@ import com.kakao.sdk.talk.TalkApiClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
+import com.kakao.sdk.common.util.KakaoJson
+import com.kakao.sdk.talk.model.Friend
+import com.kakao.sdk.talk.model.Friends
+import com.kakao.sdk.talk.model.Order
 import com.kakao.sdk.user.UserApiClient
 import com.unity3d.player.UnityPlayer
 
@@ -128,6 +132,19 @@ class UnityKakaotalkAPI {
             }
         }
         Log.d(TAG, "GetProfile exit");
+    }
+    @JvmName("GetFriends")
+    fun GetFriends(receiverObject: String, offset: Int, count: Int, order: String) {
+        var forder = Order.ASC;
+        if (order == "desc")
+            forder = Order.DESC;
+        TalkApiClient.instance.friends(offset, count, forder, callback = { friends: Friends<Friend>?, error: Throwable? ->
+            if (error != null) {
+                UnityPlayer.UnitySendMessage(receiverObject, "OnFriendsFail", error.localizedMessage);
+            } else if (friends != null) {
+                UnityPlayer.UnitySendMessage(receiverObject, "OnFriendsSuccess", KakaoJson.toJson(friends));
+            }
+        });
     }
 
     companion object {
