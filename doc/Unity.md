@@ -47,10 +47,11 @@ FAIL_RESULT_NOT_AN_ANDROID_DEVICE = "Not an android device";
 ### Model
 Template of kakaotalk results to deserialize it
 
-| Class      | Result of  | Contains              |
-| :--------- | :--------- | :-------------------- |
-| OAuthToken | Login      | Token and scopes      |
-| Profile    | GetProfile | Nickname and icon URL |
+| Class      | Result of          | Contains              |
+| :--------- | :----------------- | :-------------------- |
+| OAuthToken | Login              | Token and scopes      |
+| UserInfo   | GetUserInformation | Account data          |
+| Profile    | GetProfile         | Nickname and icon URL |
 
 
 ## Plugins/Android/UnityKakaotalkAPI.androidlib
