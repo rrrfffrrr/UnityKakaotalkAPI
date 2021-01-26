@@ -26,3 +26,6 @@ A plugin to use kakaotalk api in unity
 1. Copy Unity/* to Assets/
 2. Open Assets/Plugins/Android/UnityKakaotalkAPI.androidlib/res/values/strings.xml
 3. Change all '{key}' to kakaotalk android token
+
+# Docs
+[Unity](doc/Unity.md)
