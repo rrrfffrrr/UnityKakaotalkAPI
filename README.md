@@ -1,6 +1,6 @@
 # UnityKakaotalkAPI
 
-카카오톡을 유니티에서 사용하기 위한 플러그인
+A plugin to use kakaotalk api in unity
 
 # Version
 
