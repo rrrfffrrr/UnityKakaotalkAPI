@@ -4,6 +4,8 @@
 
 # Version
 
+| Program        | Version  |
+| :------------- | :------- |
 | Kakaotalk sdk  | V 2.2.0  |
 | Android studio | V 4.1.1  |
 | Kotlin         | V 1.3.72 |
