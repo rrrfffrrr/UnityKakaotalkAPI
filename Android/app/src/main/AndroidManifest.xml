@@ -3,4 +3,17 @@
     package="com.example.unitykakaotalkapi">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <application>
+        <meta-data android:name="com.example.unitykakaotalkapi.KakaotalkAppKey" android:value="${KakaoTalkAndroidAppKey}"></meta-data>
+        <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth“ -->
+                <data android:host="oauth" android:scheme="kakao${KakaoTalkAndroidAppKey}" />
+            </intent-filter>
+        </activity>
+    </application>
 </manifest>
