@@ -105,7 +105,7 @@ class UnityKakaotalkAPI {
         Log.d(TAG, "GetUserInformation entered")
         UserApiClient.instance.me { user, error ->
             if (error != null) {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnUserInformationFail", error.localizedMessage)
+                UnityPlayer.UnitySendMessage(receiverObject, "OnUserInformationFail", error.message)
             } else if (user != null) {
                 UnityPlayer.UnitySendMessage(receiverObject, "OnUserInformationSuccess", KakaoJson.toJson(user))
             } else {
@@ -119,7 +119,7 @@ class UnityKakaotalkAPI {
         Log.d(TAG, "GetProfile entered")
         TalkApiClient.instance.profile { profile, error ->
             if (error != null) {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnProfileFail", error.localizedMessage)
+                UnityPlayer.UnitySendMessage(receiverObject, "OnProfileFail", error.message)
             }
             else if (profile != null) {
                 UnityPlayer.UnitySendMessage(receiverObject, "OnProfileSuccess", KakaoJson.toJson(profile))
@@ -136,7 +136,7 @@ class UnityKakaotalkAPI {
             forder = Order.DESC
         TalkApiClient.instance.friends(offset, count, forder, callback = { friends: Friends<Friend>?, error: Throwable? ->
             if (error != null) {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnFriendsFail", error.localizedMessage)
+                UnityPlayer.UnitySendMessage(receiverObject, "OnFriendsFail", error.message)
             } else if (friends != null) {
                 UnityPlayer.UnitySendMessage(receiverObject, "OnFriendsSuccess", KakaoJson.toJson(friends))
             }
