@@ -1,18 +1,21 @@
 package com.example.unitykakaotalkapi
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Bundle
 import android.util.Log
 import com.kakao.sdk.auth.LoginClient
-import com.kakao.sdk.talk.TalkApiClient
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
-import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.common.util.KakaoJson
+import com.kakao.sdk.common.util.Utility
+import com.kakao.sdk.talk.TalkApiClient
 import com.kakao.sdk.talk.model.Friend
 import com.kakao.sdk.talk.model.Friends
 import com.kakao.sdk.talk.model.Order
 import com.kakao.sdk.user.UserApiClient
 import com.unity3d.player.UnityPlayer
+
 
 class UnityKakaotalkAPI {
     private var context: Context? = null
@@ -37,12 +40,18 @@ class UnityKakaotalkAPI {
         if (this.context == null) {
             this.context = context
             this.receiverObject = receiverObject
-            var index = context.resources.getIdentifier("KakaoTalkAppKey", "string", context.packageName)
-            if (index == 0) {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnInitializeFail", "Cannot find AppKey.")
-            } else {
-                KakaoSdk.init(context, context.resources.getString(index))
-                UnityPlayer.UnitySendMessage(receiverObject, "OnInitializeSuccess", "success")
+            try {
+                val app = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+                val bundle: Bundle = app.metaData
+                val key = bundle.getString("com.example.unitykakaotalkapi.KakaotalkAppKey")
+                if (key != null) {
+                    KakaoSdk.init(context, key)
+                    UnityPlayer.UnitySendMessage(receiverObject, "OnInitializeSuccess", "success")
+                } else {
+                    UnityPlayer.UnitySendMessage(receiverObject, "OnInitializeFail", "AppKey not found")
+                }
+            } catch (e: Exception) {
+                UnityPlayer.UnitySendMessage(receiverObject, "OnInitializeFail", e.message)
             }
         } else {
             UnityPlayer.UnitySendMessage(receiverObject, "OnInitializeFail", "Already initialized")
