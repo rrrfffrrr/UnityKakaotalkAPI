@@ -21,7 +21,7 @@ A plugin to use kakaotalk api in unity
 
 # Install
 
-## [Android](doc/install/Android.md)
+## [Android](Doc/Install/Android.md)
 
 # Docs
-[Unity](doc/Unity.md)
+[Unity](Doc/Unity.md)
