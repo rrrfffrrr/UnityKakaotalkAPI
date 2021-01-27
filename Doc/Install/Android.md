@@ -1,13 +1,13 @@
 # How to install on android
 
-## Copy Unity/* to Assets/
-## Goto Edit/Project Settings/Player/Android/Publishing Settings
-## Check Custom Launcher Gradle Template, Custom Base Gradle Template, Custom Gradle Properties Template
+## Copy Unity/* to Assets/  
+## Goto Edit/Project Settings/Player/Android/Publishing Settings  
+## Check Custom Launcher Gradle Template, Custom Base Gradle Template, Custom Gradle Properties Template  
 ## Enable AndroidX on Assets/Plugins/Android/gradleTemplate.properties
 ```
 android.useAndroidX=true
 android.enableJetifier=true
-```
+```  
 ## Add maven url to Assets/Plugins/Android/baseProjectTemplate.gradle
 ```
 allprojects {
@@ -15,7 +15,7 @@ allprojects {
         maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
     }
 }
-```
+```  
 ## Add dependencies to Assets/Plugins/Android/launcherTemplate.gradle
 ```
 dependencies {
@@ -26,7 +26,7 @@ dependencies {
     implementation "com.kakao.sdk:v2-link:2.2.0" // 메시지(카카오링크)
     implementation "com.kakao.sdk:v2-navi:2.2.0" // 카카오내비
 }
-```
+```  
 ## Add Android AppKey to Assets/Plugins/Android/launcherTemplate.gradle
 ```
 android {
@@ -34,4 +34,6 @@ android {
         manifestPlaceholders = [ "KakaoTalkAndroidAppKey": User AppKey here ]
     }
 }
-```
+```  
+  
+## That's it! Now we can call Kakaotalk.KakaoSdk.Initialize()!
