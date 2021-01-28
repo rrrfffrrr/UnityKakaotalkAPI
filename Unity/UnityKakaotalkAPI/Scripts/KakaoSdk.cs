@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
-using Kakaotalk.Callbacks;
+using Kakaotalk.Callback;
 
 namespace Kakaotalk
 {

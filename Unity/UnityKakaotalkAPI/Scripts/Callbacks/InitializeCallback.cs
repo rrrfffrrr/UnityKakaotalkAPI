@@ -8,12 +8,12 @@ namespace Kakaotalk.Callback {
         private SuccessAction OnSuccessCallback;
         private FailAction OnFailCallback;
 
-        public LoginCallback(SuccessAction success, FailAction fail) : base("com.rrrfffrrr.unity.kakaotalk.InitializeCallback") {
+        public InitializeCallback(SuccessAction success, FailAction fail) : base("com.rrrfffrrr.unity.kakaotalk.InitializeCallback") {
             OnSuccessCallback = success;
             OnFailCallback = fail;
         }
 
-        public void onSuccess(string tokenJson) {
+        public void onSuccess() {
             OnSuccessCallback?.Invoke();
         }
         public void onFail(string message) {

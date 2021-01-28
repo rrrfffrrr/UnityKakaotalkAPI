@@ -8,7 +8,7 @@ namespace Kakaotalk.Callback {
         private SuccessAction OnSuccessCallback;
         private FailAction OnFailCallback;
 
-        public LoginCallback(SuccessAction success, FailAction fail) : base("com.rrrfffrrr.unity.kakaotalk.LogoutCallback") {
+        public LogoutCallback(SuccessAction success, FailAction fail) : base("com.rrrfffrrr.unity.kakaotalk.LogoutCallback") {
             OnSuccessCallback = success;
             OnFailCallback = fail;
         }
