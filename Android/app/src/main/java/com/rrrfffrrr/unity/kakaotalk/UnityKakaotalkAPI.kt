@@ -93,6 +93,16 @@ class UnityKakaotalkAPI {
         }
         Log.d(TAG, "LoginWithKakao exit")
     }
+    @JvmName("LoginWithNewScopes")
+    fun LoginWithNewScopes(callback: LoginCallback, scopes: List<String>) {
+        Log.d(TAG, "LoginWithKakao enter")
+        if (context == null) {
+            callback.onFail(ERROR_NOTINITIALIZED)
+        } else {
+            LoginClient.instance.loginWithNewScopes(context!!, scopes, callback = BuildLoginCallback(callback))
+        }
+        Log.d(TAG, "LoginWithKakao exit")
+    }
 
     @JvmName("Logout")
     fun Logout(callback: LogoutCallback) {
