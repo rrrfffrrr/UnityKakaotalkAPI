@@ -1,4 +1,4 @@
-package com.example.unitykakaotalkapi
+package com.rrrfffrrr.unity.kakaotalk
 
 import org.junit.Test
 

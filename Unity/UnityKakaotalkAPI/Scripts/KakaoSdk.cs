@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
+using Kakaotalk.Callback;
 
 namespace Kakaotalk
 {
     public static class KakaoSdk
     {
-        public const string RECEIVER_OBJECT_NAME = "Kakaotalk plugin result receiver";
-        public const string TAG = "kakaotalk plugin";
-
         [System.Flags]
         public enum LOGIN_METHOD {
             Error = 0,
@@ -15,32 +13,20 @@ namespace Kakaotalk
             KakaoAccount = 2,
             Both = 3,
         }
-        public static class Order {
+        public static class ORDER {
             public const string ASC = "asc";
             public const string DESC = "desc";
         }
-        public static class Type {
-            public const string INITIALIZE = "initialize";
-            public const string LOGIN = "login";
-            public const string LOGOUT = "logout";
-            public const string USERINFO = "user information";
-            public const string PROFILE = "profile";
-            public const string FRIENDS = "friends";
-        }
-        public const string RESULT_SUCCESS = "success";
-        public const string RESULT_FAIL = "fail";
-
 
         public const string FAIL_RESULT_NOT_AN_ANDROID_DEVICE = "Not an android device";
-        public static ResultEvent OnResult = new ResultEvent();
-        private static KakaoPluginReceiver ResultReceiver;
+        public const string FAIL_RESULT_UNEXPECTED_LOGIN_METHOD = "Unexpected login method";
 
 #if UNITY_ANDROID && !UNITY_EDITOR
         private static AndroidJavaObject _kakaoSdkObject;
         private static AndroidJavaObject KakaoSdkObject {
             get {
                 if (_kakaoSdkObject == null) {
-                    using(var _static = new AndroidJavaClass("com.example.unitykakaotalkapi.UnityKakaotalkAPI")) {
+                    using(var _static = new AndroidJavaClass("com.rrrfffrrr.unity.kakaotalk.UnityKakaotalkAPI")) {
                         _kakaoSdkObject = _static.CallStatic<AndroidJavaObject>("GetInstance");
                     }
                 }
@@ -48,71 +34,67 @@ namespace Kakaotalk
             }
         }
 #endif
-        public static void Initialize() {
-            if (ResultReceiver == null) {
-                ResultReceiver = new GameObject(RECEIVER_OBJECT_NAME).AddComponent<KakaoPluginReceiver>();
-                Object.DontDestroyOnLoad(ResultReceiver);
-            }
-
+        public static void Initialize(InitializeCallback.SuccessAction onSuccess, InitializeCallback.FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer")) {
                 using (AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity")) {
                     using (AndroidJavaObject context = activity.Call<AndroidJavaObject>("getApplicationContext")) {
-                        KakaoSdkObject.Call("Initialize", activity, RECEIVER_OBJECT_NAME);
+                        KakaoSdkObject.Call("Initialize", activity, new InitializeCallback(onSuccess, onFail));
                     }
                 }
             }
 #else
-            OnResult?.Invoke(new string[] { TAG, Type.INITIALIZE, RESULT_FAIL ,FAIL_RESULT_NOT_AN_ANDROID_DEVICE });
+            onFail(FAIL_RESULT_NOT_AN_ANDROID_DEVICE);
 #endif
         }
 
-        public static void Login(LOGIN_METHOD method) {
+        public static void Login(LOGIN_METHOD method, LoginCallback.SuccessAction onSuccess, LoginCallback.FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             AndroidJNI.AttachCurrentThread();
             switch (method) {
                 case LOGIN_METHOD.Both:
-                    KakaoSdkObject.Call("LoginWithKakao");
+                    KakaoSdkObject.Call("LoginWithKakao", new LoginCallback(onSuccess, onFail));
                     break;
                 case LOGIN_METHOD.Kakaotalk:
-                    KakaoSdkObject.Call("LoginWithKakaotalk");
+                    KakaoSdkObject.Call("LoginWithKakaotalk", new LoginCallback(onSuccess, onFail));
                     break;
                 case LOGIN_METHOD.KakaoAccount:
-                    KakaoSdkObject.Call("LoginWithKakaoAccount");
+                    KakaoSdkObject.Call("LoginWithKakaoAccount", new LoginCallback(onSuccess, onFail));
                     break;
                 default:
-                    throw new System.Exception();
-        }
+                    onFail(FAIL_RESULT_UNEXPECTED_LOGIN_METHOD);
+                    break;
+            }
 #else
-            OnResult?.Invoke(new string[] { TAG, Type.LOGIN, RESULT_FAIL, FAIL_RESULT_NOT_AN_ANDROID_DEVICE });
+            onFail(FAIL_RESULT_NOT_AN_ANDROID_DEVICE);
 #endif
         }
-        public static void Logout() {
+        public static void Logout(LogoutCallback.SuccessAction onSuccess, LogoutCallback.FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            KakaoSdkObject.Call("Logout");
+            KakaoSdkObject.Call("Logout", new LogoutCallback(onSuccess, onFail));
 #else
-            OnResult?.Invoke(new string[] { TAG, Type.LOGOUT, RESULT_FAIL, FAIL_RESULT_NOT_AN_ANDROID_DEVICE });
+            onFail(FAIL_RESULT_NOT_AN_ANDROID_DEVICE);
 #endif
         }
-        public static void GetUserInformation() {
+        public static void GetUserInformation(UserInfoCallback.SuccessAction onSuccess, UserInfoCallback.FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            KakaoSdkObject.Call("GetUserInformation");
+            KakaoSdkObject.Call("GetUserInformation", new UserInfoCallback(onSuccess, onFail));
 #else
-            OnResult?.Invoke(new string[] { TAG, Type.USERINFO, RESULT_FAIL, FAIL_RESULT_NOT_AN_ANDROID_DEVICE });
+            onFail(FAIL_RESULT_NOT_AN_ANDROID_DEVICE);
 #endif
         }
-        public static void GetProfile() {
+        public static void GetProfile(ProfileCallback.SuccessAction onSuccess, ProfileCallback.FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            KakaoSdkObject.Call("GetProfile");
+            KakaoSdkObject.Call("GetProfile", new ProfileCallback(onSuccess, onFail));
 #else
-            OnResult?.Invoke(new string[] { TAG, Type.PROFILE, RESULT_FAIL, FAIL_RESULT_NOT_AN_ANDROID_DEVICE });
+            onFail(FAIL_RESULT_NOT_AN_ANDROID_DEVICE);
 #endif
         }
-        public static void GetFriends(int offset, int count, string order) {
+        public static void GetFriends(int offset, int count, string order, FriendsCallback.SuccessAction onSuccess, FriendsCallback.FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            KakaoSdkObject.Call("GetFriends", offset, count, order);
+            KakaoSdkObject.Call("GetFriends", offset, count, order, new FriendsCallback(onSuccess, onFail));
 #else
-            OnResult?.Invoke(new string[] { TAG, Type.FRIENDS, RESULT_FAIL, FAIL_RESULT_NOT_AN_ANDROID_DEVICE });
+            onFail(FAIL_RESULT_NOT_AN_ANDROID_DEVICE);
 #endif
         }
 
@@ -123,42 +105,6 @@ namespace Kakaotalk
 #else
             return null;
 #endif
-        }
-
-        [global::System.Serializable]
-        public class ResultEvent : UnityEvent<string[]> { }
-        private sealed class KakaoPluginReceiver: MonoBehaviour
-        {
-            public void OnInitializeSuccess(string reason) {
-                OnResult?.Invoke(new string[] { TAG, Type.INITIALIZE, RESULT_SUCCESS, reason});
-            }
-            public void OnInitializeFail(string reason) {
-                OnResult?.Invoke(new string[] { TAG, Type.INITIALIZE, RESULT_FAIL, reason });
-            }
-            public void OnLoginSuccess(string token) {
-                OnResult?.Invoke(new string[] { TAG, Type.LOGIN, RESULT_SUCCESS, token });
-            }
-            public void OnLoginFail(string reason) {
-                OnResult?.Invoke(new string[] { TAG, Type.LOGIN, RESULT_FAIL, reason });
-            }
-            public void OnProfileSuccess(string json) {
-                OnResult?.Invoke(new string[] { TAG, Type.PROFILE, RESULT_SUCCESS, json });
-            }
-            public void OnProfileFail(string reason) {
-                OnResult?.Invoke(new string[] { TAG, Type.PROFILE, RESULT_FAIL, reason });
-            }
-            public void OnUserInformationSuccess(string json) {
-                OnResult?.Invoke(new string[] { TAG, Type.USERINFO, RESULT_SUCCESS, json });
-            }
-            public void OnUserInformationFail(string reason) {
-                OnResult?.Invoke(new string[] { TAG, Type.USERINFO, RESULT_FAIL, reason });
-            }
-            public void OnFriendsSuccess(string json) {
-                OnResult?.Invoke(new string[] { TAG, Type.FRIENDS, RESULT_SUCCESS, json });
-            }
-            public void OnFriendsFail(string reason) {
-                OnResult?.Invoke(new string[] { TAG, Type.FRIENDS, RESULT_FAIL, reason });
-            }
         }
     }
 }
