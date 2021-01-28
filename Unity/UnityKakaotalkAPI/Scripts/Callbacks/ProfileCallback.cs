@@ -9,7 +9,7 @@ namespace Kakaotalk.Callback {
         private SuccessAction OnSuccessCallback;
         private FailAction OnFailCallback;
 
-        public ProfileCallback(SuccessAction success, FailAction fail) : base("com.rrrfffrrr.unity.kakaotalk.ProfileCallback") {
+        public ProfileCallback(SuccessAction success, FailAction fail) : base("com.rrrfffrrr.unity.kakaotalk.callback.ProfileCallback") {
             OnSuccessCallback = success;
             OnFailCallback = fail;
         }

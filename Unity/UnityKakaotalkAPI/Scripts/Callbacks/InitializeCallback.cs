@@ -8,7 +8,7 @@ namespace Kakaotalk.Callback {
         private SuccessAction OnSuccessCallback;
         private FailAction OnFailCallback;
 
-        public InitializeCallback(SuccessAction success, FailAction fail) : base("com.rrrfffrrr.unity.kakaotalk.InitializeCallback") {
+        public InitializeCallback(SuccessAction success, FailAction fail) : base("com.rrrfffrrr.unity.kakaotalk.callback.InitializeCallback") {
             OnSuccessCallback = success;
             OnFailCallback = fail;
         }
