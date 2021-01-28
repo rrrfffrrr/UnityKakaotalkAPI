@@ -15,6 +15,7 @@ import com.kakao.sdk.talk.model.Friends
 import com.kakao.sdk.talk.model.Order
 import com.kakao.sdk.user.UserApiClient
 import com.rrrfffrrr.unity.kakaotalk.callback.*
+import com.rrrfffrrr.unity.kakaotalk.model.*
 
 
 class UnityKakaotalkAPI {
@@ -126,7 +127,7 @@ class UnityKakaotalkAPI {
             if (error != null) {
                 callback.onFail(error.message ?: ERROR_UNEXPECTED.format(this::GetProfile.name))
             } else if (profile != null) {
-                callback.onSuccess(KakaoJson.toJson(profile))
+                callback.onSuccess(KakaoJson.toJson(TalkProfile(profile.nickname, profile.profileImageUrl, profile.thumbnailUrl, profile.countryISO)))
             } else {
                 callback.onFail(ERROR_NORESULT.format(this::GetProfile.name))
             }

@@ -3,7 +3,7 @@ using Kakaotalk.Model;
 
 namespace Kakaotalk.Callback {
     public class ProfileCallback : AndroidJavaProxy {
-        public delegate void SuccessAction(Profile profile);
+        public delegate void SuccessAction(TalkProfile profile);
         public delegate void FailAction(string message);
 
         private SuccessAction OnSuccessCallback;
@@ -16,7 +16,7 @@ namespace Kakaotalk.Callback {
 
         public void onSuccess(string profileJson) {
             try {
-                var profile = JsonUtility.FromJson<Profile>(profileJson);
+                var profile = JsonUtility.FromJson<TalkProfile>(profileJson);
                 OnSuccessCallback?.Invoke(profile);
             } catch {
                 onFail("Error occurred while deserialize profile");
