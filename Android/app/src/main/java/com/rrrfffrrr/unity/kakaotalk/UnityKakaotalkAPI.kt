@@ -14,6 +14,7 @@ import com.kakao.sdk.talk.model.Friend
 import com.kakao.sdk.talk.model.Friends
 import com.kakao.sdk.talk.model.Order
 import com.kakao.sdk.user.UserApiClient
+import com.rrrfffrrr.unity.kakaotalk.callback.*
 
 
 class UnityKakaotalkAPI {
