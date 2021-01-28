@@ -7,8 +7,8 @@ namespace Kakaotalk.Model
     {
         public bool favorite;
         public long id;
-        public string profileNickname;
-        public string profileThumbnailImage;
+        public string profile_nickname;
+        public string profile_thumbnail_image;
         public string uuid;
     }
 }
