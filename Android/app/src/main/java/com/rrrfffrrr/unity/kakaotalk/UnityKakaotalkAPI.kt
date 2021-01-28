@@ -1,4 +1,4 @@
-package com.example.unitykakaotalkapi
+package com.rrrfffrrr.unity.kakaotalk
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -14,7 +14,6 @@ import com.kakao.sdk.talk.model.Friend
 import com.kakao.sdk.talk.model.Friends
 import com.kakao.sdk.talk.model.Order
 import com.kakao.sdk.user.UserApiClient
-import com.unity3d.player.UnityPlayer
 
 
 class UnityKakaotalkAPI {
@@ -22,20 +21,8 @@ class UnityKakaotalkAPI {
     private lateinit var receiverObject: String
     private val TAG: String = "UnityKakaotalkAPI"
 
-    private val LoginCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-        Log.d(TAG, "Login callback entered")
-        if (error != null) {
-            // fail to login
-            UnityPlayer.UnitySendMessage(receiverObject, "OnLoginFail", error.message)
-        } else if (token != null) {
-            // success to login
-            UnityPlayer.UnitySendMessage(receiverObject, "OnLoginSuccess", KakaoJson.toJson(token))
-        }
-        Log.d(TAG, "Login callback exit")
-    }
-
     @JvmName("Initialize")
-    fun Initialize(context: Context, receiverObject: String) {
+    fun Initialize(context: Context, callback: InitializeCallback) {
         Log.d(TAG, "Initialize enter")
         if (this.context == null) {
             this.context = context
@@ -43,118 +30,139 @@ class UnityKakaotalkAPI {
             try {
                 val app = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
                 val bundle: Bundle = app.metaData
-                val key = bundle.getString("com.example.unitykakaotalkapi.KakaotalkAppKey")
+                val key = bundle.getString("com.rrrfffrrr.unity.kakaotalk.KakaotalkAppKey")
                 if (key != null) {
                     KakaoSdk.init(context, key)
-                    UnityPlayer.UnitySendMessage(receiverObject, "OnInitializeSuccess", "success")
+                    callback.onSuccess();
                 } else {
-                    UnityPlayer.UnitySendMessage(receiverObject, "OnInitializeFail", "AppKey not found")
+                    callback.onFail("AppKey not found");
                 }
             } catch (e: Exception) {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnInitializeFail", e.message)
+                callback.onFail(e.message ?: ERROR_UNEXPECTED.format(this::Initialize.name));
             }
         } else {
-            UnityPlayer.UnitySendMessage(receiverObject, "OnInitializeFail", "Already initialized")
+            callback.onFail("Already initialized");
         }
         Log.d(TAG, "Initialize exit")
     }
+
+    private fun BuildLoginCallback(callback: LoginCallback): (OAuthToken?, Throwable?) -> Unit  {
+        return { token, error ->
+            Log.d(TAG, "Login callback entered")
+            if (error != null) {
+                // fail to login
+                callback.onFail(error.message ?: ERROR_UNEXPECTED.format("Login"))
+            } else if (token != null) {
+                // success to login
+                callback.onSuccess(KakaoJson.toJson(token))
+            }
+            Log.d(TAG, "Login callback exit")
+        }
+    }
     @JvmName("LoginWithKakaotalk")
-    fun LoginWithKakaotalk() {
+    fun LoginWithKakaotalk(callback: LoginCallback) {
         Log.d(TAG, "LoginWithKakaotalk enter")
         if (context == null) {
-            UnityPlayer.UnitySendMessage(receiverObject, "OnLoginFail", "KakaoSdk not initialized.")
+            callback.onFail(ERROR_NOTINITIALIZED)
         } else if (LoginClient.instance.isKakaoTalkLoginAvailable(context!!)) {
-            LoginClient.instance.loginWithKakaoTalk(context!!, callback = LoginCallback)
+            LoginClient.instance.loginWithKakaoTalk(context!!, callback = BuildLoginCallback(callback))
         } else { // When kakaotalk not installed
-            UnityPlayer.UnitySendMessage(receiverObject, "OnLoginFail", "Kakaotalk not installed on this device.")
+            callback.onFail(ERROR_NOTINSTALLED)
         }
         Log.d(TAG, "LoginWithKakaotalk exit")
     }
     @JvmName("LoginWithKakaoAccount")
-    fun LoginWithKakaoAccount() {
+    fun LoginWithKakaoAccount(callback: LoginCallback) {
         Log.d(TAG, "LoginWithKakaoAccount enter")
         if (context == null) {
-            UnityPlayer.UnitySendMessage(receiverObject, "OnLoginFail", "KakaoSdk not initialized.")
+            callback.onFail(ERROR_NOTINITIALIZED)
         } else {
-            LoginClient.instance.loginWithKakaoAccount(context!!, callback = LoginCallback)
+            LoginClient.instance.loginWithKakaoAccount(context!!, callback = BuildLoginCallback(callback))
         }
         Log.d(TAG, "LoginWithKakaoAccount exit")
     }
     @JvmName("LoginWithKakao")
-    fun LoginWithKakao() {
+    fun LoginWithKakao(callback: LoginCallback) {
         Log.d(TAG, "LoginWithKakao enter")
-
         if (context == null) {
-            UnityPlayer.UnitySendMessage(receiverObject, "OnLoginFail", "KakaoSdk not initialized.")
+            callback.onFail(ERROR_NOTINITIALIZED)
         } else if (LoginClient.instance.isKakaoTalkLoginAvailable(context!!)) {
-            LoginClient.instance.loginWithKakaoTalk(context!!, callback = LoginCallback)
+            LoginClient.instance.loginWithKakaoTalk(context!!, callback = BuildLoginCallback(callback))
         } else {
-            LoginClient.instance.loginWithKakaoAccount(context!!, callback = LoginCallback)
+            LoginClient.instance.loginWithKakaoAccount(context!!, callback = BuildLoginCallback(callback))
         }
         Log.d(TAG, "LoginWithKakao exit")
     }
+
     @JvmName("Logout")
-    fun Logout() {
+    fun Logout(callback: LogoutCallback) {
         UserApiClient.instance.logout { error ->
             if (error != null) {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnLogout", error.message)
+                callback.onFail(error.message ?: ERROR_UNEXPECTED.format(this::Logout.name))
             } else {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnLogout", "success")
+                callback.onSuccess()
             }
         }
     }
+    @JvmName("GetUserInformation")
+    fun GetUserInformation(callback: UserInfoCallback) {
+        Log.d(TAG, "GetUserInformation entered")
+        UserApiClient.instance.me { user, error ->
+            if (error != null) {
+                callback.onFail(error.message ?: ERROR_UNEXPECTED.format(this::GetUserInformation.name))
+            } else if (user != null) {
+                callback.onSuccess(KakaoJson.toJson(user))
+            } else {
+                callback.onFail(ERROR_NORESULT.format(this::GetUserInformation.name))
+            }
+        }
+        Log.d(TAG, "GetUserInformation exit")
+    }
+    @JvmName("GetProfile")
+    fun GetProfile(callback: ProfileCallback) {
+        Log.d(TAG, "GetProfile entered")
+        TalkApiClient.instance.profile { profile, error ->
+            if (error != null) {
+                callback.onFail(error.message ?: ERROR_UNEXPECTED.format(this::GetProfile.name))
+            } else if (profile != null) {
+                callback.onSuccess(KakaoJson.toJson(profile))
+            } else {
+                callback.onFail(ERROR_NORESULT.format(this::GetProfile.name))
+            }
+        }
+        Log.d(TAG, "GetProfile exit")
+    }
+    @JvmName("GetFriends")
+    fun GetFriends(offset: Int, count: Int, order: String, callback: FriendsCallback) {
+        var forder = Order.ASC
+        if (order == "desc")
+            forder = Order.DESC
+        TalkApiClient.instance.friends(offset, count, forder, callback = { friends: Friends<Friend>?, error: Throwable? ->
+            if (error != null) {
+                callback.onFail(error.message ?: ERROR_UNEXPECTED.format(this::GetFriends.name))
+            } else if (friends != null) {
+                callback.onSuccess(KakaoJson.toJson(friends))
+            } else {
+                callback.onFail(ERROR_NORESULT.format(this::GetFriends.name))
+            }
+        })
+    }
+
     @JvmName("GetKeyHash")
     fun GetKeyHash() : String {
         Log.d(TAG, "GetKeyHash")
         if (context == null) return ""
         return Utility.getKeyHash(context!!)
     }
-    @JvmName("GetUserInformation")
-    fun GetUserInformation() {
-        Log.d(TAG, "GetUserInformation entered")
-        UserApiClient.instance.me { user, error ->
-            if (error != null) {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnUserInformationFail", error.message)
-            } else if (user != null) {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnUserInformationSuccess", KakaoJson.toJson(user))
-            } else {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnUserInformationFail", "Somthing went wrong")
-            }
-        }
-        Log.d(TAG, "GetUserInformation exit")
-    }
-    @JvmName("GetProfile")
-    fun GetProfile() {
-        Log.d(TAG, "GetProfile entered")
-        TalkApiClient.instance.profile { profile, error ->
-            if (error != null) {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnProfileFail", error.message)
-            }
-            else if (profile != null) {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnProfileSuccess", KakaoJson.toJson(profile))
-            } else {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnProfileFail", "Somthing went wrong")
-            }
-        }
-        Log.d(TAG, "GetProfile exit")
-    }
-    @JvmName("GetFriends")
-    fun GetFriends(offset: Int, count: Int, order: String) {
-        var forder = Order.ASC
-        if (order == "desc")
-            forder = Order.DESC
-        TalkApiClient.instance.friends(offset, count, forder, callback = { friends: Friends<Friend>?, error: Throwable? ->
-            if (error != null) {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnFriendsFail", error.message)
-            } else if (friends != null) {
-                UnityPlayer.UnitySendMessage(receiverObject, "OnFriendsSuccess", KakaoJson.toJson(friends))
-            }
-        })
-    }
 
     companion object {
         private var sdk : UnityKakaotalkAPI? = null
         private val TAG: String = "UnityKakaotalkAPI"
+
+        const val ERROR_NOTINITIALIZED = "Plugin not initialized"
+        const val ERROR_NOTINSTALLED = "Kakaotalk not installed on this device"
+        const val ERROR_UNEXPECTED = "Something went wrong while %s"
+        const val ERROR_NORESULT = "No result while %s"
 
         @JvmStatic
         fun GetInstance() : UnityKakaotalkAPI {

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.unitykakaotalkapi">
+    package="com.rrrfffrrr.unity.kakaotalk">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application>
-        <meta-data android:name="com.example.unitykakaotalkapi.KakaotalkAppKey" android:value="${KakaoTalkAndroidAppKey}"></meta-data>
+        <meta-data android:name="com.rrrfffrrr.unity.kakaotalk.KakaotalkAppKey" android:value="${KakaoTalkAndroidAppKey}"></meta-data>
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
