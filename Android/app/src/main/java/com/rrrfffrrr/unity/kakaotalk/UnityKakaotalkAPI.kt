@@ -95,6 +95,7 @@ class UnityKakaotalkAPI {
 
     @JvmName("Logout")
     fun Logout(callback: LogoutCallback) {
+        Log.d(TAG, "Logout enter")
         UserApiClient.instance.logout { error ->
             if (error != null) {
                 callback.onFail(error.message ?: ERROR_UNEXPECTED.format(this::Logout.name))
@@ -102,6 +103,7 @@ class UnityKakaotalkAPI {
                 callback.onSuccess()
             }
         }
+        Log.d(TAG, "Logout exit")
     }
     @JvmName("GetUserInformation")
     fun GetUserInformation(callback: UserInfoCallback) {
@@ -133,6 +135,7 @@ class UnityKakaotalkAPI {
     }
     @JvmName("GetFriends")
     fun GetFriends(offset: Int, count: Int, order: String, callback: FriendsCallback) {
+        Log.d(TAG, "GetFriends entered")
         var forder = Order.ASC
         if (order == "desc")
             forder = Order.DESC
@@ -145,6 +148,7 @@ class UnityKakaotalkAPI {
                 callback.onFail(ERROR_NORESULT.format(this::GetFriends.name))
             }
         })
+        Log.d(TAG, "GetFriends exit")
     }
 
     @JvmName("GetKeyHash")
