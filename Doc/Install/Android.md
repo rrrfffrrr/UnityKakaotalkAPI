@@ -1,15 +1,21 @@
 # How to install on android
 
 ## Copy Unity/* to Assets/  
+
 ## Goto Edit/Project Settings/Player/Android/Publishing Settings  
-## Check Custom Launcher Gradle Template, Custom Base Gradle Template, Custom Gradle Properties Template  
+
+## Check and enable custom gradle setting  
+Custom Launcher Gradle Template  
+Custom Base Gradle Template  
+Custom Gradle Properties Template  
+
 ## Enable AndroidX on Assets/Plugins/Android/gradleTemplate.properties
-```
+```js
 android.useAndroidX=true
 android.enableJetifier=true
 ```  
 ## Add maven url to Assets/Plugins/Android/baseProjectTemplate.gradle
-```
+```Gradle
 allprojects {
     repositories {
         maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
@@ -17,7 +23,7 @@ allprojects {
 }
 ```  
 ## Add dependencies to Assets/Plugins/Android/launcherTemplate.gradle
-```
+```Gradle
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.3.72"
     implementation "com.kakao.sdk:v2-user:2.2.0" // 카카오 로그인
@@ -28,12 +34,31 @@ dependencies {
 }
 ```  
 ## Add Android AppKey to Assets/Plugins/Android/launcherTemplate.gradle
-```
+```Gradle
 android {
     defaultConfig {
-        manifestPlaceholders = [ "KakaoTalkAndroidAppKey": User AppKey here ]
+        manifestPlaceholders = [ "KakaoTalkAndroidAppKey": "User AppKey here" ]
     }
 }
 ```  
   
 ## That's it! Now we can call Kakaotalk.KakaoSdk.Initialize()!
+```C#
+using UnityEngine;
+using Kakaotalk;
+
+public class TestKakaotalkAPI : MonoBehaviour
+{
+    void Awake()
+    {
+        KakaoSdk.Initialize(() => {
+            KakaoSdk.Login(KakaoSdk.LOGIN_METHOD.Both, (token) => {
+            Debug.Log(JsonUtility.ToJson(token));
+            KakaoSdk.GetProfile((profile) => {
+                Debug.Log(JsonUtility.ToJson(profile));
+            }, e => Debug.Log(e) );
+            }, e => Debug.Log(e) );
+        }, e => Debug.Log(e) );
+    }
+}
+```
