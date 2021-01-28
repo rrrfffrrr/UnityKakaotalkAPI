@@ -18,7 +18,6 @@ import com.kakao.sdk.user.UserApiClient
 
 class UnityKakaotalkAPI {
     private var context: Context? = null
-    private lateinit var receiverObject: String
     private val TAG: String = "UnityKakaotalkAPI"
 
     @JvmName("Initialize")
@@ -26,7 +25,6 @@ class UnityKakaotalkAPI {
         Log.d(TAG, "Initialize enter")
         if (this.context == null) {
             this.context = context
-            this.receiverObject = receiverObject
             try {
                 val app = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
                 val bundle: Bundle = app.metaData
