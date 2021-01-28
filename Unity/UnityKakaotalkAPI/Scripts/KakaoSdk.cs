@@ -6,8 +6,6 @@ namespace Kakaotalk
 {
     public static class KakaoSdk
     {
-        public const string RECEIVER_OBJECT_NAME = "Kakaotalk plugin result receiver";
-
         [System.Flags]
         public enum LOGIN_METHOD {
             Error = 0,
@@ -15,7 +13,7 @@ namespace Kakaotalk
             KakaoAccount = 2,
             Both = 3,
         }
-        public static class Order {
+        public static class ORDER {
             public const string ASC = "asc";
             public const string DESC = "desc";
         }
