@@ -77,6 +77,14 @@ namespace Kakaotalk
             onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
+        public static void LoginWithNewScopes(string[] scopes, LoginSuccessAction onSuccess, FailAction onFail) {
+            AndroidJNI.AttachCurrentThread();
+#if UNITY_ANDROID && !UNITY_EDITOR
+            KakaoSdkObject.Call("LoginWithNewScopes", scopes, new LoginCallback(onSuccess, onFail));
+#else
+            onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
+#endif
+        }
         public static void Logout(SuccessAction onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             KakaoSdkObject.Call("Logout", new LogoutCallback(onSuccess, onFail));
