@@ -4,13 +4,14 @@ A plugin to use kakaotalk api in unity
 
 # Version
 
-| Program        | Version                             |
-| :------------- | :---------------------------------- |
-| Unity          | 2020.1.17f1                         |
-| Kakaotalk SDK  | 2.2.0                               |
-| Android studio | 4.1.1                               |
-| Android SDK    | Android 11.0 (R) API 30, Revision 3 |
-| Kotlin         | 1.3.72                              |
+| Program                   | Version                             |
+| :------------------------ | :---------------------------------- |
+| Unity                     | 2020.1.17f1                         |
+| Kakaotalk SDK             | 2.2.0                               |
+| Android studio            | 4.1.1                               |
+| Android SDK               | Android 11.0 (R) API 30, Revision 3 |
+| Android minimum API level | Android 5.1 'Lollipop' API level 22 |
+| Kotlin                    | 1.3.72                              |
 
 ## Support OS
 
