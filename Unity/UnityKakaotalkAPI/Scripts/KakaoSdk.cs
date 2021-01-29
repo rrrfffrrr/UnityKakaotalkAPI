@@ -18,7 +18,7 @@ namespace Kakaotalk
             public const string DESC = "desc";
         }
 
-        public const string FAIL_RESULT_NOT_AN_ANDROID_DEVICE = "Not an android device";
+        public const string FAIL_RESULT_NOT_SUPPORTED_DEVICE = "UnityKakaotalkAPI not supported on this device";
         public const string FAIL_RESULT_UNEXPECTED_LOGIN_METHOD = "Unexpected login method";
 
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -44,7 +44,7 @@ namespace Kakaotalk
                 }
             }
 #else
-            onFail(FAIL_RESULT_NOT_AN_ANDROID_DEVICE);
+            onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
 
@@ -66,35 +66,35 @@ namespace Kakaotalk
                     break;
             }
 #else
-            onFail(FAIL_RESULT_NOT_AN_ANDROID_DEVICE);
+            onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
         public static void Logout(LogoutCallback.SuccessAction onSuccess, LogoutCallback.FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             KakaoSdkObject.Call("Logout", new LogoutCallback(onSuccess, onFail));
 #else
-            onFail(FAIL_RESULT_NOT_AN_ANDROID_DEVICE);
+            onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
         public static void GetUserInformation(UserInfoCallback.SuccessAction onSuccess, UserInfoCallback.FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             KakaoSdkObject.Call("GetUserInformation", new UserInfoCallback(onSuccess, onFail));
 #else
-            onFail(FAIL_RESULT_NOT_AN_ANDROID_DEVICE);
+            onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
         public static void GetProfile(ProfileCallback.SuccessAction onSuccess, ProfileCallback.FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             KakaoSdkObject.Call("GetProfile", new ProfileCallback(onSuccess, onFail));
 #else
-            onFail(FAIL_RESULT_NOT_AN_ANDROID_DEVICE);
+            onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
         public static void GetFriends(int offset, int count, string order, FriendsCallback.SuccessAction onSuccess, FriendsCallback.FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             KakaoSdkObject.Call("GetFriends", offset, count, order, new FriendsCallback(onSuccess, onFail));
 #else
-            onFail(FAIL_RESULT_NOT_AN_ANDROID_DEVICE);
+            onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
 
