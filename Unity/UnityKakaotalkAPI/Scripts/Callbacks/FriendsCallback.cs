@@ -1,15 +1,14 @@
 using UnityEngine;
 using Kakaotalk.Model;
 
-namespace Kakaotalk.Callback {
+namespace Kakaotalk.Callback
+{
     public class FriendsCallback : AndroidJavaProxy {
-        public delegate void SuccessAction(Friends friends);
-        public delegate void FailAction(string message);
 
-        private SuccessAction OnSuccessCallback;
-        private FailAction OnFailCallback;
+        private readonly GetFriendsSuccessAction OnSuccessCallback;
+        private readonly FailAction OnFailCallback;
 
-        public FriendsCallback(SuccessAction success, FailAction fail) : base("com.rrrfffrrr.unity.kakaotalk.callback.FriendsCallback") {
+        public FriendsCallback(GetFriendsSuccessAction success, FailAction fail) : base("com.rrrfffrrr.unity.kakaotalk.callback.FriendsCallback") {
             OnSuccessCallback = success;
             OnFailCallback = fail;
         }

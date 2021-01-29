@@ -1,9 +1,17 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
 using Kakaotalk.Callback;
+using Kakaotalk.Model;
 
 namespace Kakaotalk
 {
+    public delegate void SuccessAction();
+    public delegate void FailAction(string message);
+
+    public delegate void LoginSuccessAction(OAuthToken token);
+    public delegate void GetProfileSuccessAction(TalkProfile profile);
+    public delegate void GetUserInfoSuccessAction(UserInfo user);
+    public delegate void GetFriendsSuccessAction(Friends friends);
+
     public static class KakaoSdk
     {
         [System.Flags]
@@ -34,7 +42,7 @@ namespace Kakaotalk
             }
         }
 #endif
-        public static void Initialize(InitializeCallback.SuccessAction onSuccess, InitializeCallback.FailAction onFail) {
+        public static void Initialize(SuccessAction onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer")) {
                 using (AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity")) {
@@ -48,7 +56,7 @@ namespace Kakaotalk
 #endif
         }
 
-        public static void Login(LOGIN_METHOD method, LoginCallback.SuccessAction onSuccess, LoginCallback.FailAction onFail) {
+        public static void Login(LOGIN_METHOD method, LoginSuccessAction onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             AndroidJNI.AttachCurrentThread();
             switch (method) {
@@ -69,28 +77,28 @@ namespace Kakaotalk
             onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
-        public static void Logout(LogoutCallback.SuccessAction onSuccess, LogoutCallback.FailAction onFail) {
+        public static void Logout(SuccessAction onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             KakaoSdkObject.Call("Logout", new LogoutCallback(onSuccess, onFail));
 #else
             onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
-        public static void GetUserInformation(UserInfoCallback.SuccessAction onSuccess, UserInfoCallback.FailAction onFail) {
+        public static void GetUserInformation(GetUserInfoSuccessAction onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             KakaoSdkObject.Call("GetUserInformation", new UserInfoCallback(onSuccess, onFail));
 #else
             onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
-        public static void GetProfile(ProfileCallback.SuccessAction onSuccess, ProfileCallback.FailAction onFail) {
+        public static void GetProfile(GetProfileSuccessAction onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             KakaoSdkObject.Call("GetProfile", new ProfileCallback(onSuccess, onFail));
 #else
             onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
-        public static void GetFriends(int offset, int count, string order, FriendsCallback.SuccessAction onSuccess, FriendsCallback.FailAction onFail) {
+        public static void GetFriends(int offset, int count, string order, GetFriendsSuccessAction onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             KakaoSdkObject.Call("GetFriends", offset, count, order, new FriendsCallback(onSuccess, onFail));
 #else

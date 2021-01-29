@@ -3,13 +3,10 @@ using Kakaotalk.Model;
 
 namespace Kakaotalk.Callback {
     public class ProfileCallback : AndroidJavaProxy {
-        public delegate void SuccessAction(TalkProfile profile);
-        public delegate void FailAction(string message);
+        private readonly GetProfileSuccessAction OnSuccessCallback;
+        private readonly FailAction OnFailCallback;
 
-        private SuccessAction OnSuccessCallback;
-        private FailAction OnFailCallback;
-
-        public ProfileCallback(SuccessAction success, FailAction fail) : base("com.rrrfffrrr.unity.kakaotalk.callback.ProfileCallback") {
+        public ProfileCallback(GetProfileSuccessAction success, FailAction fail) : base("com.rrrfffrrr.unity.kakaotalk.callback.ProfileCallback") {
             OnSuccessCallback = success;
             OnFailCallback = fail;
         }
