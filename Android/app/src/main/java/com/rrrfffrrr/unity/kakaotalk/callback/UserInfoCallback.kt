@@ -1,4 +1,4 @@
-package com.rrrfffrrr.unity.kakaotalk
+package com.rrrfffrrr.unity.kakaotalk.callback
 
 interface UserInfoCallback {
     public fun onSuccess(userJson: String)

@@ -14,6 +14,8 @@ import com.kakao.sdk.talk.model.Friend
 import com.kakao.sdk.talk.model.Friends
 import com.kakao.sdk.talk.model.Order
 import com.kakao.sdk.user.UserApiClient
+import com.rrrfffrrr.unity.kakaotalk.callback.*
+import com.rrrfffrrr.unity.kakaotalk.model.*
 
 
 class UnityKakaotalkAPI {
@@ -91,9 +93,20 @@ class UnityKakaotalkAPI {
         }
         Log.d(TAG, "LoginWithKakao exit")
     }
+    @JvmName("LoginWithNewScopes")
+    fun LoginWithNewScopes(callback: LoginCallback, scopes: List<String>) {
+        Log.d(TAG, "LoginWithKakao enter")
+        if (context == null) {
+            callback.onFail(ERROR_NOTINITIALIZED)
+        } else {
+            LoginClient.instance.loginWithNewScopes(context!!, scopes, callback = BuildLoginCallback(callback))
+        }
+        Log.d(TAG, "LoginWithKakao exit")
+    }
 
     @JvmName("Logout")
     fun Logout(callback: LogoutCallback) {
+        Log.d(TAG, "Logout enter")
         UserApiClient.instance.logout { error ->
             if (error != null) {
                 callback.onFail(error.message ?: ERROR_UNEXPECTED.format(this::Logout.name))
@@ -101,6 +114,7 @@ class UnityKakaotalkAPI {
                 callback.onSuccess()
             }
         }
+        Log.d(TAG, "Logout exit")
     }
     @JvmName("GetUserInformation")
     fun GetUserInformation(callback: UserInfoCallback) {
@@ -123,7 +137,7 @@ class UnityKakaotalkAPI {
             if (error != null) {
                 callback.onFail(error.message ?: ERROR_UNEXPECTED.format(this::GetProfile.name))
             } else if (profile != null) {
-                callback.onSuccess(KakaoJson.toJson(profile))
+                callback.onSuccess(KakaoJson.toJson(TalkProfile(profile.nickname, profile.profileImageUrl, profile.thumbnailUrl, profile.countryISO)))
             } else {
                 callback.onFail(ERROR_NORESULT.format(this::GetProfile.name))
             }
@@ -132,6 +146,7 @@ class UnityKakaotalkAPI {
     }
     @JvmName("GetFriends")
     fun GetFriends(offset: Int, count: Int, order: String, callback: FriendsCallback) {
+        Log.d(TAG, "GetFriends entered")
         var forder = Order.ASC
         if (order == "desc")
             forder = Order.DESC
@@ -144,6 +159,7 @@ class UnityKakaotalkAPI {
                 callback.onFail(ERROR_NORESULT.format(this::GetFriends.name))
             }
         })
+        Log.d(TAG, "GetFriends exit")
     }
 
     @JvmName("GetKeyHash")

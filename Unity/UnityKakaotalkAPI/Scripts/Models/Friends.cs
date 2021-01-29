@@ -5,7 +5,7 @@ namespace Kakaotalk.Model
     [Serializable]
     public class Friends
     {
-        public int totalCount;
+        public int total_count;
         public Friend[] elements;
     }
 }

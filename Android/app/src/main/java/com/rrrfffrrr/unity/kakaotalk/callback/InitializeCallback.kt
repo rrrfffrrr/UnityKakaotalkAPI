@@ -1,4 +1,4 @@
-package com.rrrfffrrr.unity.kakaotalk
+package com.rrrfffrrr.unity.kakaotalk.callback
 
 interface InitializeCallback {
     public fun onSuccess()

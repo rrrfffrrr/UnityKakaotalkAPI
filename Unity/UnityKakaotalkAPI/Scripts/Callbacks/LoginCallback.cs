@@ -3,13 +3,10 @@ using Kakaotalk.Model;
 
 namespace Kakaotalk.Callback {
     public class LoginCallback : AndroidJavaProxy {
-        public delegate void SuccessAction(OAuthToken token);
-        public delegate void FailAction(string message);
+        private readonly LoginSuccessAction OnSuccessCallback;
+        private readonly FailAction OnFailCallback;
 
-        private SuccessAction OnSuccessCallback;
-        private FailAction OnFailCallback;
-
-        public LoginCallback(SuccessAction success, FailAction fail) : base("com.rrrfffrrr.unity.kakaotalk.LoginCallback") {
+        public LoginCallback(LoginSuccessAction success, FailAction fail) : base("com.rrrfffrrr.unity.kakaotalk.callback.LoginCallback") {
             OnSuccessCallback = success;
             OnFailCallback = fail;
         }

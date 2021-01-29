@@ -25,7 +25,7 @@ ORDER { ASC, DESC }
 
 #### Strings
 ```
-FAIL_RESULT_NOT_AN_ANDROID_DEVICE = "Not an android device";
+FAIL_RESULT_NOT_SUPPORTED_DEVICE = "UnityKakaotalkAPI not supported on this device";
 FAIL_RESULT_UNEXPECTED_LOGIN_METHOD = "Unexpected login method";
 ```
 
