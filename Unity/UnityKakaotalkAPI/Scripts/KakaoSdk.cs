@@ -58,7 +58,6 @@ namespace Kakaotalk
 
         public static void Login(LOGIN_METHOD method, LoginSuccessAction onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            AndroidJNI.AttachCurrentThread();
             switch (method) {
                 case LOGIN_METHOD.Both:
                     KakaoSdkObject.Call("LoginWithKakao", new LoginCallback(onSuccess, onFail));
@@ -79,7 +78,6 @@ namespace Kakaotalk
         }
         public static void LoginWithNewScopes(string[] scopes, LoginSuccessAction onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            AndroidJNI.AttachCurrentThread();
             KakaoSdkObject.Call("LoginWithNewScopes", scopes, new LoginCallback(onSuccess, onFail));
 #else
             onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
