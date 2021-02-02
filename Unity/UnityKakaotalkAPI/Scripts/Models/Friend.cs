@@ -1,10 +1,8 @@
 using System;
 
-namespace Kakaotalk.Model
-{
+namespace Kakaotalk.Model {
     [Serializable]
-    public class Friend
-    {
+    public class Friend {
         public bool favorite;
         public long id;
         public string profile_nickname;

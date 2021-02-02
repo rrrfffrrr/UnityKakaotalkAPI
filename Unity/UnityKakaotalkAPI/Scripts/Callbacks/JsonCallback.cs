@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Kakaotalk.Callback
 {
-    public class JsonCallback<T> : AndroidJavaProxy
-    {
+    public class JsonCallback<T> : AndroidJavaProxy {
         private readonly JsonSuccessAction<T> OnSuccessCallback;
         private readonly FailAction OnFailCallback;
 
@@ -15,12 +15,13 @@ namespace Kakaotalk.Callback
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006", Justification = "<Kotlin code convention>")]
         public void onSuccess(string result) {
             try {
-                var data = JsonUtility.FromJson<T>(result);
+                var data = JsonConvert.DeserializeObject<T>(result);
                 OnSuccessCallback?.Invoke(data);
             } catch (System.Exception e) {
                 OnFailCallback?.Invoke(e.Message);
             }
         }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006", Justification = "<Kotlin code convention>")]
         public void onFail(string message) {
             OnFailCallback?.Invoke(message);
