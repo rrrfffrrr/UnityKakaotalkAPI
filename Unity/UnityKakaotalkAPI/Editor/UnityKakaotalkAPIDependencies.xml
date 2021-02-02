@@ -6,10 +6,10 @@
       <repositories>
         <repository>https://devrepo.kakao.com/nexus/content/groups/public</repository>
       </repositories>
-        <androidPackage spec="com.kakao.sdk:v2-user:2.2.0"/>
-        <androidPackage spec="com.kakao.sdk:v2-talk:2.2.0"/>
-        <androidPackage spec="com.kakao.sdk:v2-story:2.2.0"/>
-        <androidPackage spec="com.kakao.sdk:v2-link:2.2.0"/>
-        <androidPackage spec="com.kakao.sdk:v2-navi:2.2.0"/>
+        <androidPackage spec="com.kakao.sdk:v2-user:2.3.0"/>
+        <androidPackage spec="com.kakao.sdk:v2-talk:2.3.0"/>
+        <androidPackage spec="com.kakao.sdk:v2-story:2.3.0"/>
+        <androidPackage spec="com.kakao.sdk:v2-link:2.3.0"/>
+        <androidPackage spec="com.kakao.sdk:v2-navi:2.3.0"/>
     </androidPackages>
 </dependencies>

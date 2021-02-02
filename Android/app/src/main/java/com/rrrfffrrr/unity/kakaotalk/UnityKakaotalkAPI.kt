@@ -146,7 +146,7 @@ class UnityKakaotalkAPI {
                     callback.onFail(error.message ?: ERROR_UNEXPECTED.format(this::getUserInformation.name))
                 }
                 user != null -> {
-                    callback.onSuccess(KakaoJson.toJson(user))
+                    callback.onSuccess(KakaoJson.toJson(User(user)))
                 }
                 else -> {
                     callback.onFail(ERROR_NORESULT.format(this::getUserInformation.name))
