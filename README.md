@@ -17,9 +17,9 @@ A plugin to use kakaotalk api in unity
 
 ## Support OS
 
-| OS       | REST API | Login, Logout | User information           | Profile | Friends        |
-| :------- | :------- | :------------ | :------------------------- | :------ | :------------- |
-| Android  | X        | O             | △ (Some fields wont work) | O       | O (Not tested) |
+| OS       | REST API | Login, Logout | Unlink | User information           | Profile | Friends        |
+| :------- | :------- | :------------ | :----- | :------------------------- | :------ | :------------- |
+| Android  | X        | O             | O      | △ (Some fields wont work) | O       | O (Not tested) |
 
 # Install
 
