@@ -5,27 +5,28 @@
 A wrapper class to communicate between user code and plugin.  
 
 ### Methods
+```js
+void Initialize(void(), void(string))
+void Login(LOGIN_METHOD, void(OAuthToken), void(string))
+void LoginWithNewScopes(string[], void(OAuthToken), void(string))
+void Logout(void(), void(string))
+void Unlink(void(), void(string))
+void GetUserInformation(void(UserInfo), void(string))
+void GetProfile(void(TalkProfile), void(string))
+void GetFriends(int offset, int count, int order, void(Friends), void(string))
 ```
-void Initialize(onSuccess, onFail)
-void Login(LOGIN_METHOD, onSuccess, onFail)
-void LoginWithNewScopes(scopes, onSucces, onFail)
-void Logout(onSuccess, onFail)
-void GetUserInformation(onSuccess, onFail)
-void GetProfile(onSuccess, onFail)
-void GetFriends(offset, count, order, onSuccess, onFail)
-```
-```
+```C#
 string GetKeyHash()
 ```
 
 #### Enums
-```
-LOGIN_METHOD { Error, Kakaotalk, KakaoAccount, Both }
-ORDER { ASC, DESC }
+```C#
+enum LOGIN_METHOD { Error, Kakaotalk, KakaoAccount, Both }
+static class ORDER { ASC="asc", DESC="desc" }
 ```
 
 #### Strings
-```
+```C#
 FAIL_RESULT_NOT_SUPPORTED_DEVICE = "UnityKakaotalkAPI not supported on this device";
 FAIL_RESULT_UNEXPECTED_LOGIN_METHOD = "Unexpected login method";
 ```

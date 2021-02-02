@@ -53,10 +53,10 @@ public class TestKakaotalkAPI : MonoBehaviour
     {
         KakaoSdk.Initialize(() => {
             KakaoSdk.Login(KakaoSdk.LOGIN_METHOD.Both, (token) => {
-            Debug.Log(JsonUtility.ToJson(token));
-            KakaoSdk.GetProfile((profile) => {
-                Debug.Log(JsonUtility.ToJson(profile));
-            }, e => Debug.Log(e) );
+                Debug.Log(JsonUtility.ToJson(token));
+                KakaoSdk.GetProfile((profile) => {
+                    Debug.Log(JsonUtility.ToJson(profile));
+                }, e => Debug.Log(e) );
             }, e => Debug.Log(e) );
         }, e => Debug.Log(e) );
     }
