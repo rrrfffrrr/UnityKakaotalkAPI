@@ -116,6 +116,20 @@ class UnityKakaotalkAPI {
         }
         Log.d(TAG, "Logout exit")
     }
+
+    @JvmName("Unlink")
+    fun Unlink(callback: DefaultCallback) {
+        Log.d(TAG, "Unlink enter")
+        UserApiClient.instance.unlink { error ->
+            if (error != null) {
+                callback.onFail( error.message ?: ERROR_UNEXPECTED.format(this::Unlink.name))
+            } else {
+                callback.onSuccess()
+            }
+        }
+        Log.d(TAG, "Unlink exit")
+    }
+
     @JvmName("GetUserInformation")
     fun GetUserInformation(callback: UserInfoCallback) {
         Log.d(TAG, "GetUserInformation entered")

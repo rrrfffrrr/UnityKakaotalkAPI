@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Kakaotalk.Callback;
 using Kakaotalk.Model;
 
@@ -85,7 +85,14 @@ namespace Kakaotalk
         }
         public static void Logout(SuccessAction onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            KakaoSdkObject.Call("Logout", new LogoutCallback(onSuccess, onFail));
+            KakaoSdkObject.Call("Logout", new DefaultCallback(onSuccess, onFail));
+#else
+            onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
+#endif
+        }
+        public static void Unlink(SuccessAction onSuccess, FailAction onFail) {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            KakaoSdkObject.Call("Unlink", new DefaultCallback(onSuccess, onFail));
 #else
             onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
