@@ -1,31 +1,15 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Kakaotalk.Callback;
 using Kakaotalk.Model;
 
 namespace Kakaotalk
 {
     public delegate void SuccessAction();
+    public delegate void JsonSuccessAction<T>(T data);
     public delegate void FailAction(string message);
-
-    public delegate void LoginSuccessAction(OAuthToken token);
-    public delegate void GetProfileSuccessAction(TalkProfile profile);
-    public delegate void GetUserInfoSuccessAction(UserInfo user);
-    public delegate void GetFriendsSuccessAction(Friends friends);
 
     public static class KakaoSdk
     {
-        [System.Flags]
-        public enum LOGIN_METHOD {
-            Error = 0,
-            Kakaotalk = 1,
-            KakaoAccount = 2,
-            Both = 3,
-        }
-        public static class ORDER {
-            public const string ASC = "asc";
-            public const string DESC = "desc";
-        }
-
         public const string FAIL_RESULT_NOT_SUPPORTED_DEVICE = "UnityKakaotalkAPI not supported on this device";
         public const string FAIL_RESULT_UNEXPECTED_LOGIN_METHOD = "Unexpected login method";
 
@@ -35,19 +19,20 @@ namespace Kakaotalk
             get {
                 if (_kakaoSdkObject == null) {
                     using(var _static = new AndroidJavaClass("com.rrrfffrrr.unity.kakaotalk.UnityKakaotalkAPI")) {
-                        _kakaoSdkObject = _static.CallStatic<AndroidJavaObject>("GetInstance");
+                        _kakaoSdkObject = _static.CallStatic<AndroidJavaObject>("getInstance");
                     }
                 }
                 return _kakaoSdkObject;
             }
         }
-#endif
+        #endif
+
         public static void Initialize(SuccessAction onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer")) {
                 using (AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity")) {
                     using (AndroidJavaObject context = activity.Call<AndroidJavaObject>("getApplicationContext")) {
-                        KakaoSdkObject.Call("Initialize", activity, new InitializeCallback(onSuccess, onFail));
+                        KakaoSdkObject.Call("initialize", activity, new DefaultCallback(onSuccess, onFail));
                     }
                 }
             }
@@ -56,17 +41,17 @@ namespace Kakaotalk
 #endif
         }
 
-        public static void Login(LOGIN_METHOD method, LoginSuccessAction onSuccess, FailAction onFail) {
+        public static void Login(LoginMethod method, JsonSuccessAction<OAuthToken> onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
             switch (method) {
-                case LOGIN_METHOD.Both:
-                    KakaoSdkObject.Call("LoginWithKakao", new LoginCallback(onSuccess, onFail));
+                case LoginMethod.Both:
+                    KakaoSdkObject.Call("loginWithKakao", new JsonCallback<OAuthToken>(onSuccess, onFail));
                     break;
-                case LOGIN_METHOD.Kakaotalk:
-                    KakaoSdkObject.Call("LoginWithKakaotalk", new LoginCallback(onSuccess, onFail));
+                case LoginMethod.Kakaotalk:
+                    KakaoSdkObject.Call("loginWithKakaotalk", new JsonCallback<OAuthToken>(onSuccess, onFail));
                     break;
-                case LOGIN_METHOD.KakaoAccount:
-                    KakaoSdkObject.Call("LoginWithKakaoAccount", new LoginCallback(onSuccess, onFail));
+                case LoginMethod.KakaoAccount:
+                    KakaoSdkObject.Call("loginWithKakaoAccount", new JsonCallback<OAuthToken>(onSuccess, onFail));
                     break;
                 default:
                     onFail(FAIL_RESULT_UNEXPECTED_LOGIN_METHOD);
@@ -76,44 +61,44 @@ namespace Kakaotalk
             onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
-        public static void LoginWithNewScopes(string[] scopes, LoginSuccessAction onSuccess, FailAction onFail) {
+        public static void LoginWithNewScopes(string[] scopes, JsonSuccessAction<OAuthToken> onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            KakaoSdkObject.Call("LoginWithNewScopes", scopes, new LoginCallback(onSuccess, onFail));
+            KakaoSdkObject.Call("loginWithNewScopes", scopes, new JsonCallback<OAuthToken>(onSuccess, onFail));
 #else
             onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
         public static void Logout(SuccessAction onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            KakaoSdkObject.Call("Logout", new DefaultCallback(onSuccess, onFail));
+            KakaoSdkObject.Call("logout", new DefaultCallback(onSuccess, onFail));
 #else
             onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
         public static void Unlink(SuccessAction onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            KakaoSdkObject.Call("Unlink", new DefaultCallback(onSuccess, onFail));
+            KakaoSdkObject.Call("unlink", new DefaultCallback(onSuccess, onFail));
 #else
             onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
-        public static void GetUserInformation(GetUserInfoSuccessAction onSuccess, FailAction onFail) {
+        public static void GetUserInformation(JsonSuccessAction<UserInfo> onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            KakaoSdkObject.Call("GetUserInformation", new UserInfoCallback(onSuccess, onFail));
+            KakaoSdkObject.Call("getUserInformation", new JsonCallback<UserInfo>(onSuccess, onFail));
 #else
             onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
-        public static void GetProfile(GetProfileSuccessAction onSuccess, FailAction onFail) {
+        public static void GetProfile(JsonSuccessAction<TalkProfile> onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            KakaoSdkObject.Call("GetProfile", new ProfileCallback(onSuccess, onFail));
+            KakaoSdkObject.Call("getProfile", new JsonCallback<TalkProfile>(onSuccess, onFail));
 #else
             onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
         }
-        public static void GetFriends(int offset, int count, string order, GetFriendsSuccessAction onSuccess, FailAction onFail) {
+        public static void GetFriends(int offset, int count, string order, JsonSuccessAction<Friends> onSuccess, FailAction onFail) {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            KakaoSdkObject.Call("GetFriends", offset, count, order, new FriendsCallback(onSuccess, onFail));
+            KakaoSdkObject.Call("getFriends", offset, count, order, new JsonCallback<Friends>(onSuccess, onFail));
 #else
             onFail(FAIL_RESULT_NOT_SUPPORTED_DEVICE);
 #endif
@@ -121,8 +106,7 @@ namespace Kakaotalk
 
         public static string GetKeyHash() {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            Debug.Log("Call GetKeyHash");
-            return KakaoSdkObject.Call<string>("GetKeyHash");
+            return KakaoSdkObject.Call<string>("getKeyHash");
 #else
             return null;
 #endif

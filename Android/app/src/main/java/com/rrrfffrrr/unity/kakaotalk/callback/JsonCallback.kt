@@ -1,6 +1,6 @@
 package com.rrrfffrrr.unity.kakaotalk.callback
 
-interface DefaultCallback {
-    fun onSuccess()
+interface JsonCallback {
+    fun onSuccess(result: String)
     fun onFail(reason: String)
 }

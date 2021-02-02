@@ -10,9 +10,11 @@ namespace Kakaotalk.Callback {
             OnFailCallback = fail;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006", Justification = "<Kotlin code convention>")]
         public void onSuccess() {
             OnSuccessCallback?.Invoke();
         }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006", Justification = "<Kotlin code convention>")]
         public void onFail(string message) {
             OnFailCallback?.Invoke(message);
         }
