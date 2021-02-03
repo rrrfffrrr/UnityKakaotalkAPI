@@ -6,23 +6,32 @@ A wrapper class to communicate between user code and plugin.
 
 ### Methods
 ```js
-void Initialize(void(), void(string))
-void Login(LOGIN_METHOD, void(OAuthToken), void(string))
-void LoginWithNewScopes(string[], void(OAuthToken), void(string))
-void Logout(void(), void(string))
-void Unlink(void(), void(string))
-void GetUserInformation(void(UserInfo), void(string))
-void GetProfile(void(TalkProfile), void(string))
-void GetFriends(int offset, int count, int order, void(Friends), void(string))
+void Initialize(void(), void(string));
+void Login(LoginMethod, void(OAuthToken), void(string));
+void LoginWithNewScopes(string[], void(OAuthToken), void(string));
+void Logout(void(), void(string));
+void Unlink(void(), void(string));
+void GetUserInformation(void(UserInfo), void(string));
+void GetProfile(void(TalkProfile), void(string));
+void GetFriends(int offset, int count, int order, void(Friends), void(string));
 ```
 ```C#
-string GetKeyHash()
+string GetKeyHash();
 ```
 
 #### Enums
 ```C#
-enum LOGIN_METHOD { Error, Kakaotalk, KakaoAccount, Both }
-static class ORDER { ASC="asc", DESC="desc" }
+enum LoginMethod { Error, Kakaotalk, KakaoAccount, Both }
+enum Gender { FEMALE, MALE, UNKNOWN }
+enum AgeRange { AGE_0_9, AGE_10_14, AGE_15_19, AGE_20_29, AGE_30_39, AGE_40_49, AGE_50_59, AGE_60_69, AGE_70_79, AGE_80_89, AGE_90_ABOVE, UNKNOWN }
+static class Order { ASC="asc", DESC="desc" }
+```
+
+### Delegates
+```C#
+delegate void SuccessAction();
+delegate void JsonSuccessAction<T>(T data);
+delegate void FailAction(string message);
 ```
 
 #### Strings
