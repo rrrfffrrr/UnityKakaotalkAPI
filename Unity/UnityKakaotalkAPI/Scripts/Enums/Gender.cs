@@ -1,7 +1,7 @@
 ﻿namespace Kakaotalk {
     public enum Gender {
-        FEMAIL,
-        MAIL,
+        FEMALE,
+        MALE,
         UNKNOWN
     }
 }
