@@ -7,9 +7,8 @@ A plugin to use kakaotalk api in unity
 | Program                   | Version                             |
 | :------------------------ | :---------------------------------- |
 | Unity                     | 2020.1.17f1                         |
-| Kakaotalk SDK             | 2.2.0                               |
+| Kakaotalk SDK             | 2.3.0                               |
 | Android studio            | 4.1.1                               |
-| Require Android NDK		| 20.0.5594570						  |
 | Require gradle			| 5.6.4								  |
 | Android SDK               | Android 11.0 (R) API 30, Revision 3 |
 | Android minimum API level | Android 5.1 'Lollipop' API level 22 |
@@ -23,7 +22,8 @@ A plugin to use kakaotalk api in unity
 
 # Install
 
-## [Android](Doc/Install/Android.md)
+## Android
+[Manual](Doc/Install/Android.md) [Unity-jar-resolver](Doc/Install/Android-resolver.md)
 
 # Docs
 [Unity](Doc/Unity.md)
