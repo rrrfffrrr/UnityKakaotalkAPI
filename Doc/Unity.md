@@ -21,8 +21,10 @@ string GetKeyHash()
 
 #### Enums
 ```C#
-enum LOGIN_METHOD { Error, Kakaotalk, KakaoAccount, Both }
-static class ORDER { ASC="asc", DESC="desc" }
+enum LoginMethod { Error, Kakaotalk, KakaoAccount, Both }
+enum Gender { FEMALE, MALE, UNKNOWN }
+enum AgeRange { AGE_0_9, AGE_10_14, AGE_15_19, AGE_20_29, AGE_30_39, AGE_40_49, AGE_50_59, AGE_60_69, AGE_70_79, AGE_80_89, AGE_90_ABOVE, UNKNOWN }
+static class Order { ASC="asc", DESC="desc" }
 ```
 
 #### Strings
