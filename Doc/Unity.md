@@ -7,7 +7,7 @@ A wrapper class to communicate between user code and plugin.
 ### Methods
 ```js
 void Initialize(void(), void(string))
-void Login(LOGIN_METHOD, void(OAuthToken), void(string))
+void Login(LoginMethod, void(OAuthToken), void(string))
 void LoginWithNewScopes(string[], void(OAuthToken), void(string))
 void Logout(void(), void(string))
 void Unlink(void(), void(string))
