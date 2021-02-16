@@ -22,6 +22,9 @@ A plugin to use kakaotalk api in unity
 
 # Install
 
+## Requirement
+[Newtonsoft.Json](https://github.com/jilleJr/Newtonsoft.Json-for-Unity)
+
 ## Android
 [Manual](Doc/Install/Android.md) [Unity-jar-resolver](Doc/Install/Android-resolver.md)
 
